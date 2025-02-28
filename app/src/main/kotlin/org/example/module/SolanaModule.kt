@@ -42,9 +42,9 @@ class SolanaModule {
     }
 
     /**
-     * 솔라나 계정 금액을 가져온다.
-     * @param publicKey String 공개키
-     * @return BigIn
+     * Retrieves the Solana account balance.
+     * @param publicKey String Public key
+     * @return BigDecimal
      */
     fun getSolanaBalance(publicKey: PublicKey): BigDecimal {
         println("getBalance")
@@ -58,23 +58,24 @@ class SolanaModule {
         }
     }
 
+
     /**
-     * 솔라나를 전송한다.
-     * @param senderMnemonic String 보내는 사람 니모닉
-     * @param recipient String 받는 사람 퍼블릭키 주소
-     * @param amount BigInteger 보내는 양
+     * Transfers Solana.
+     * @param senderMnemonic String Sender's mnemonic
+     * @param recipient String Recipient's public key address
+     * @param amount BigDecimal Amount to send
      */
     fun solanaTransfer(senderMnemonic: String,
                        recipientPublicKey: String,
                        amount: BigDecimal
     ) : Transaction {
-        if (amount  < BigDecimal.valueOf(0L)) {
+        if (amount < BigDecimal.valueOf(0L)) {
             throw IllegalArgumentException("Negative numbers are not allowed.")
         }
 
-        // 공개키 생성
+        // Generate public key
         val senderAccount = getSolanaAccount(senderMnemonic)
-        // 솔라나 계정 금액 가져오기
+        // Retrieve Solana account balance
         val balance = getSolanaBalance(senderAccount.publicKey)
 
         if (balance < amount) {
@@ -103,12 +104,13 @@ class SolanaModule {
         return transaction
     }
 
+
     /**
-     * 현재 토큰 밸런스 가져오기
-     * @param secretKey String - 민팅 owner 시크릿키 (payer)
-     * @param userPublicKey String - 조회할 사용자 지갑주소
-     * @param mint String - 민팅 주소
-     * @return Double
+     * Retrieves the current SPL token balance.
+     * @param secretKey String - Owner's secret key (payer)
+     * @param userPublicKey String - User's wallet address to check balance
+     * @param mint String - Mint address
+     * @return BigDecimal
      */
     fun splTokenBalance(
         secretKey: String,
@@ -117,12 +119,11 @@ class SolanaModule {
     ): BigDecimal {
 
         val mintAddress = PublicKey(mint)
-        //커스텀 토큰프로그램 어떻게하냐고고고오오오오
+        // How to handle custom token programs?
 
-        // 3. 공개 키 생성
+        // Generate public key
         val generateSolanaAccount = getSolanaAccount(secretKey, "")
 
-        // Select the correct program ID and lamports conversion based on the environment
         return try {
             // Find or create the associated token account
             val tokenAccount = getOrCreateAssociatedTokenAccount(
@@ -130,13 +131,12 @@ class SolanaModule {
                 mintAddress,
                 PublicKey(userPublicKey),
                 false,
-                "comfirmd",
+                "confirmed",
                 TokenProgram.PROGRAM_ID
             )
 
-
             val amount = if(tokenAccount.second >= BigDecimal.valueOf(0L)){
-                tokenAccount.second.divide(BigDecimal.valueOf(LAMPORTS_PER_SOL));
+                tokenAccount.second.divide(BigDecimal.valueOf(LAMPORTS_PER_SOL))
             } else {
                 BigDecimal.valueOf(0L)
             }
@@ -146,15 +146,14 @@ class SolanaModule {
             println("Error fetching SPL token balance: ${e.message}")
             return BigDecimal.valueOf(0L)
         }
-
     }
 
     /**
-     * SPL 토큰 전송 서비스
+     * SPL token transfer service.
      * @param secretKey String
      * @param recipient String
      * @param mint String
-     * @param amount BigInteger
+     * @param amount BigDecimal
      * @return Transaction
      */
     fun splTokenTransfer(secretKey: String,
@@ -162,14 +161,14 @@ class SolanaModule {
                          mint: String,
                          amount: BigDecimal
     ): Transaction {
-        if (amount  < BigDecimal.valueOf(0L)) {
+        if (amount < BigDecimal.valueOf(0L)) {
             throw IllegalArgumentException("Negative numbers are not allowed.")
         }
 
-        // 공개키 생성
+        // Generate public key
         val senderKeypair = getSolanaAccount(secretKey)
 
-        // Fetch balance of the SPL Token account
+        // Fetch SPL token account balance
         val balance = try {
             splTokenBalance(
                 secretKey,
@@ -187,7 +186,7 @@ class SolanaModule {
             throw IllegalArgumentException("Insufficient balance")
         }
 
-        // Create the transaction
+        // Create transaction
         val transaction = Transaction()
         val mintAddress = PublicKey(mint)
         val senderAccount = getOrCreateAssociatedTokenAccount(
@@ -195,17 +194,16 @@ class SolanaModule {
             mintAddress,
             senderKeypair.publicKey,
             false,
-            "comfirmd",
+            "confirmed",
             TokenProgram.PROGRAM_ID
         )
-
 
         val recipientAccount = getOrCreateAssociatedTokenAccount(
             senderKeypair,
             mintAddress,
             PublicKey(recipient),
             false,
-            "comfirmd",
+            "confirmed",
             TokenProgram.PROGRAM_ID
         )
 
@@ -239,59 +237,59 @@ class SolanaModule {
             amount.multiply(BigDecimal.valueOf(LAMPORTS_PER_SOL))
         }
     }
-    fun mintNft(){
-        // try {
-        //     // Solana 네트워크 클라이언트 설정ㅂㅈㄱㅂㅈㄱ
-        //     val client = RpcClient("https://api.devnet.solana.com")
-        //
-        //     // 각 파라미터를 PublicKey 객체로 변환
-        //     val collectionMint = PublicKey(get)
-        //     val candyMachine = PublicKey(request.candyMachine)
-        //     val candyGuard = PublicKey(request.candyGuard)
-        //     val nftMint = Account() // 새로운 NFT Mint 계정 생성
-        //     val collectionUpdateAuthority = keypair.publicKey
-        //
-        //     // 트랜잭션 생성
-        //     val transaction = Transaction()
-        //
-        //     // Candy Machine과 Candy Guard를 사용한 NFT 민팅 트랜잭션 추가
-        //     transaction.addInstruction(
-        //         TransactionInstruction(
-        //             PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"), // Metaplex Program ID
-        //             listOf(
-        //                 collectionMint,  // 컬렉션 NFT 주소
-        //                 candyMachine,    // Candy Machine ID
-        //                 candyGuard,      // Candy Guard ID
-        //                 nftMint.publicKey,  // 새로 민팅할 NFT 주소
-        //                 collectionUpdateAuthority  // 컬렉션 업데이트 권한자
-        //             ),
-        //             "mintV2".toByteArray() // `mintV2` RPC 호출
-        //         )
-        //     )
-        //
-        //     // SOL 결제 (Minting 비용 전송)
-        //     transaction.addInstruction(
-        //         SystemProgram.transfer(
-        //             keypair.publicKey,
-        //             PublicKey("YOUR_DESTINATION_ADDRESS"), // 결제 수신 주소
-        //             1_000_000 // 0.001 SOL (테스트용)
-        //         )
-        //     )
-        //
-        //     // 트랜잭션 서명 및 전송
-        //     transaction.sign(keypair)
-        //     val signature = client.api.sendTransaction(transaction)
-        //
-        //     println("NFT Mint Transaction Signature: $signature")
-        //     return signature
-        // } catch (e: RpcException) {
-        //     println("Error: ${e.message}")
-        //     throw e
-        // }
-    }
+    // fun mintNft(){
+    //     try {
+    //         // Solana 네트워크 클라이언트 설정ㅂㅈㄱㅂㅈㄱ
+    //         val client = RpcClient("https://api.devnet.solana.com")
+    //
+    //         // 각 파라미터를 PublicKey 객체로 변환
+    //         val collectionMint = PublicKey(get)
+    //         val candyMachine = PublicKey(request.candyMachine)
+    //         val candyGuard = PublicKey(request.candyGuard)
+    //         val nftMint = Account() // 새로운 NFT Mint 계정 생성
+    //         val collectionUpdateAuthority = keypair.publicKey
+    //
+    //         // 트랜잭션 생성
+    //         val transaction = Transaction()
+    //
+    //         // Candy Machine과 Candy Guard를 사용한 NFT 민팅 트랜잭션 추가
+    //         transaction.addInstruction(
+    //             TransactionInstruction(
+    //                 PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"), // Metaplex Program ID
+    //                 listOf(
+    //                     collectionMint,  // 컬렉션 NFT 주소
+    //                     candyMachine,    // Candy Machine ID
+    //                     candyGuard,      // Candy Guard ID
+    //                     nftMint.publicKey,  // 새로 민팅할 NFT 주소
+    //                     collectionUpdateAuthority  // 컬렉션 업데이트 권한자
+    //                 ),
+    //                 "mintV2".toByteArray() // `mintV2` RPC 호출
+    //             )
+    //         )
+    //
+    //         // SOL 결제 (Minting 비용 전송)
+    //         transaction.addInstruction(
+    //             SystemProgram.transfer(
+    //                 keypair.publicKey,
+    //                 PublicKey("YOUR_DESTINATION_ADDRESS"), // 결제 수신 주소
+    //                 1_000_000 // 0.001 SOL (테스트용)
+    //             )
+    //         )
+    //
+    //         // 트랜잭션 서명 및 전송
+    //         transaction.sign(keypair)
+    //         val signature = client.api.sendTransaction(transaction)
+    //
+    //         println("NFT Mint Transaction Signature: $signature")
+    //         return signature
+    //     } catch (e: RpcException) {
+    //         println("Error: ${e.message}")
+    //         throw e
+    //     }
+    // }
 
     /**
-     *
+     * Mints an NFT.
      * @param secretKey String
      * @param collection String
      * @param candyMachine String
@@ -302,10 +300,10 @@ class SolanaModule {
             val decodedKey = Base58.decode(secretKey)
             val account = Account(decodedKey)
 
-            // 공개키 생성
+            // Generate public key
             val senderKeypair = getSolanaAccount(secretKey)
 
-            val nftMint = Account() // 새 NFT 민팅을 위한 새로운 Keypair 생성
+            val nftMint = Account() // Create a new Keypair for minting a new NFT
 
             val mintRequest = buildMintTransaction(
                 account,
@@ -316,7 +314,6 @@ class SolanaModule {
             )
 
             val result = this.connection.call(mintRequest.method,mintRequest.params, Moshi::class.java)
-
 
         } catch (e: Exception) {
             println("Error minting NFT: ${e.message}")
@@ -357,10 +354,10 @@ class SolanaModule {
     }
 
     /**
-     * 토큰 지갑정보를 가져오고, 만약에 존재하지 않으면 토큰 주소를 생성한다.
-     * @param payer Account - 지불 계정
-     * @param mint PublicKey - 민트 주소
-     * @param owner PublicKey - 토큰 오너 주소
+     * Retrieves token wallet information. If it does not exist, a token address is created.
+     * @param payer Account - Paying account
+     * @param mint PublicKey - Mint address
+     * @param owner PublicKey - Token owner address
      * @param allowOwnerOffCurve Boolean
      * @param commitment String
      * @param programId PublicKey
@@ -411,29 +408,28 @@ class SolanaModule {
         return Pair(associatedTokenAddress.address, BigDecimal.ZERO)
     }
 
-    companion object {
-        private const val LAMPORTS_PER_SOL = 1_000_000_000L // 1 SOL = 1 billion lamports
-    }
-
     /**
-     * mnemonic을 분해하여 계정을 만든다
-     * @param mnemonic String 니모닉 주소
-     * @param passphrase String 비밀번호
-     * @return Account mnemonic에 따른 계정 정보
+     * Generates an account from the given mnemonic.
+     * @param mnemonic String Mnemonic address
+     * @param passphrase String Password
+     * @return Account Account information derived from mnemonic
      */
     private fun getSolanaAccount(mnemonic: String, passphrase: String = ""): Account {
-
         val seed = MnemonicUtils.generateSeed(mnemonic, "")
 
-        // 2. Ed25519 비밀 키 생성 (상위 32바이트)
+        // Generate Ed25519 private key (first 32 bytes)
         val privateKey = seed.copyOf(32)
         val privateKeyParams = Ed25519PrivateKeyParameters(privateKey, 0)
 
-        // 3. 공개 키 생성
+        // Generate public key
         val publicKey = privateKeyParams.generatePublicKey().encoded
 
-        // 4. Solana Account 생성
+        // Create Solana account
         return Account(privateKey + publicKey)
+    }
+
+    companion object {
+        private const val LAMPORTS_PER_SOL = 1_000_000_000L // 1 SOL = 1 billion lamports
     }
 
 }

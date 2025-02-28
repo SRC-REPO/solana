@@ -42,18 +42,8 @@ pip install .
 
 Here’s a basic example of how to use the library:
 
-```python
-from my_awesome_library import AwesomeFeature
 
-# Initialize the feature
-feature = AwesomeFeature(param1="value1")
-
-# Use the feature
-result = feature.do_something()
-print(result)
-```
-
-Check out the [documentation](https://github.com/username/repository-name/wiki) for more examples and detailed instructions.
+Check out the [documentation](https://github.com/SRC-REPO/solana.git) for more examples and detailed instructions.
 
 ---
 
@@ -104,6 +94,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 Feel free to reach out if you have questions or feedback:
 
-- **Email**: your.email@example.com
-- **Twitter**: [@YourHandle](https://twitter.com/YourHandle)
+- **Email**: zkdlwu94@gmail.com
+- **LinkedIn**: [@YourHandle](https://www.linkedin.com/feed/)
 
