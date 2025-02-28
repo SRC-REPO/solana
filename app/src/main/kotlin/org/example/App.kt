@@ -22,12 +22,12 @@ import java.math.BigDecimal
 
 fun main() {
     println("qfqwfqwf")
-    val rpcEndpoint = "https://api.devnet.solana.com"
-    val publicKey = "8ixPw2F1J2g724nkYeZtg4fEFrWTRf2Tna965rbwsVoD"
-    val userPublicKey = "CZtRsFZ9oRNjU1tiS5PrETT8aEQTVAnA4FKCRPVdWWJe"
-    val noTokenUserPublicKey = "98HNCdVFAddLntayXeRz68JV49RX1TgqSRYT5mRf6QCu"
-    val mint = "E3iTukHHrabJ1f3mW8rKRZV6Y4PKMzoLD1HmN8gNGpgt"
-    val secretKey = "digital drink present man hamster leave orbit scorpion tackle cheese chat cabbage"
+    val rpcEndpoint = ""
+    val publicKey = ""
+    val userPublicKey = ""
+    val noTokenUserPublicKey = ""
+    val mint = ""
+    val secretKey = ""
     val solanaService = SolanaModule()
     println(solanaService.getSolanaBalance(PublicKey("87j7biqJpvvUvgNqvZPXShDJ8md3yszBcuSCCBL9Vu9d")))
     //solanaService.solanaTransfer(secretKey,noTokenUserPublicKey,BigInteger.valueOf(2L));
