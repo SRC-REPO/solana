@@ -1,6 +1,7 @@
-# solana
+# Solana
 Solana spl token transfer Kotlin library
 
+Solana spl token transfer library in Kotlin developed by [SRC.ai](https://www.saferoadclub.app)
 
 # My Awesome Library
 
@@ -14,53 +15,14 @@ A brief and compelling description of your library. Explain what it does, who it
 
 ## Features
 
-- **Feature 1**: Briefly explain the feature.
-- **Feature 2**: Another great feature and its utility.
-- **Feature 3**: Highlight unique or advanced capabilities.
-
----
-
-## Installation
-
-You can install this library using `pip`:
-
-```bash
-pip install my-awesome-library
-```
-
-Or clone this repository and install manually:
-
-```bash
-git clone https://github.com/username/repository-name.git
-cd repository-name
-pip install .
-```
-
----
-
-## Usage
-
-Here’s a basic example of how to use the library:
-
-
-Check out the [documentation](https://github.com/SRC-REPO/solana.git) for more examples and detailed instructions.
-
----
-
-## API Reference
-
-### `class AwesomeFeature`
-
-- **`__init__(param1: str)`**
-    - Initialize the feature with a parameter.
-
-- **`do_something() -> str`**
-    - Perform an action and return the result.
-
-### `function utility_function(param: int) -> int`
-
-- A standalone utility function for processing integers.
-
+   * Retrieves the Solana account balance.
+   * Transfers Solana.
+   * Retrieves the current SPL token balance.
+   * SPL token transfer service.
+   * Mints an NFT.
+   * Retrieves token wallet information. If it does not exist, a token address is created.
+   * Generates an account from the given mnemonic.
+     
 ---
 
 ## Contributing
@@ -83,17 +45,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
-## Acknowledgements
-
-- Thanks to [Dependency Name](https://dependency-link.com) for inspiration.
-- Shoutout to the open-source community for their amazing tools.
-
----
-
 ## Contact
 
 Feel free to reach out if you have questions or feedback:
 
-- **Email**: zkdlwu94@gmail.com
-- **LinkedIn**: [@YourHandle](https://www.linkedin.com/feed/)
+- **Email**: support@saferoadclub.com
 
