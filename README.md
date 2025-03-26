@@ -1,4 +1,4 @@
-# Solana
+# Solana Kotlin Library
 Solana spl token transfer Kotlin library
 
 Solana spl token transfer library in Kotlin developed by [SRC.ai](https://www.saferoadclub.app)
